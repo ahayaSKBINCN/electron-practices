@@ -1,0 +1,4 @@
+{
+  "extends": "./snowpack-cli/config/snowpack.js",
+  "plugins": ["@snowpack/plugin-react-refresh"]
+}
