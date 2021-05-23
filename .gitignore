@@ -5,3 +5,7 @@
 /dist
 /build
 
+# yarn npm
+yarn-error.log
+yarn.lock
+
