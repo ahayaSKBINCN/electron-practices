@@ -42,8 +42,6 @@ async function createWindow() {
 
   win.loadURL(getAssetURL('index.html'));
 
-  // load remote module.
-  require("../services/remote/main");
 
   const menuBuilder = new MenuBuilder(win);
   menuBuilder.buildMenu();
