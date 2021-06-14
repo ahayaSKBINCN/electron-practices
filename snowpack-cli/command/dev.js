@@ -106,17 +106,22 @@ module.exports = async function (electronArgs) {
             log.info('🔌 Shutting down gracefully...');
         }
         try {
-           await Promise.all([main.kill(), renderer.kill()])
+            await Promise.all([main.kill(), renderer.kill()])
         } finally {
             process.exit(code);
         }
     });
-
     try {
         await renderer.dev();
+    } catch (err) {
+        console.error(err);
+        log.error(err, {label: "snowpack-dev-renderer-error"});
+        process.exit(1);
+    }
+    try {
         await main.dev(electronArgs);
     } catch (err) {
-        log.error(err);
+        log.error(err, {label: "snowpack-dev-main-error"});
         process.exit(1);
     }
 };

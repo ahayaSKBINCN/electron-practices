@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from "./App";
+import "./theme.css";
 
 type ImportMeta = {
   hot?: {
     accept: () => void
   }
 }
-
 
 ReactDOM.render(
   <React.StrictMode>
