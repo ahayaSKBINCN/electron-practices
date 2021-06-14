@@ -29,9 +29,9 @@ async function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      nodeIntegration: true, // is default value after Electron v5
-      contextIsolation: false, // protect against prototype pollution
-      enableRemoteModule: true, // turn off remote
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
       preload:"./preload.js"
     },
   })
