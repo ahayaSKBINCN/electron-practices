@@ -1,6 +1,5 @@
 const path = require('path');
 const builtinModules = require('builtin-modules');
-const commonjs = require('@rollup/plugin-commonjs')
 
 const config = require('.');
 
@@ -29,20 +28,6 @@ module.exports = {
     },
     packageOptions: {
         external: [...builtinModules.filter((external) => external !== 'process'),'electron'],
-        polyfillNode: true,
-        rollup: {
-            plugins: [
-                commonjs({
-                    include: [
-                        // packages
-                        'fs',
-                        'path'
-                    ],
-                    // the mixing is the problem
-                    transformMixedEsModules: true
-                })
-            ]
-        }
     },
 
 };

@@ -1,8 +1,7 @@
-import { SvgIconTypeMap } from '@material-ui/core';
+// import { SvgIconTypeMap } from '@material-ui/core';
 // import { OverridableComponent } from '@material-ui/core/OverridableComponent';
 import Dashboard from '@material-ui/icons/Dashboard';
 import InfinitelyScrollBar from "./pages/Advanced-Fontend/InfinitelyScrollBar";
-import MarkdownParser from './pages/MarkdownParser';
 
 declare interface IRoute {
   path: string;
@@ -22,12 +21,5 @@ const routes: IRoute[] = [
     component: InfinitelyScrollBar,
     layout: '/admin',
   },
-  // {
-  //   path: '/MarkdownParser',
-  //   name:'MarkdownParser',
-  //   icon: Dashboard,
-  //   component: MarkdownParser,
-  //   layout:'/admin',
-  // }
 ];
 export default routes;

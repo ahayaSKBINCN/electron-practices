@@ -1,29 +1,32 @@
 import React, { HTMLAttributes, Suspense } from 'react';
 import { imagine1, imagine2, imagine3, imagine4 } from '../../assets/images';
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, List } from "@material-ui/core";
-import { remote } from 'electron';
-
-console.log(remote);
+import { List } from "@material-ui/core";
+import Animated from 'animejs';
 
 
 const useStyle = makeStyles({
-  container: {},
+  container: {
+    width: 310,
+    height: 180,
+    overflow: "hidden",
+  },
   list: {
     listStyle: "none",
     display: "flex",
     flexDirection: "row",
-    width: 100,
-    height: 80,
-    overflow: "hidden"
+    width: 310,
+    height: 180,
+    paddingInlineStart: 0
   },
   'list-item': {
-    width: 100,
-    height: 80,
+    width: 300,
+    height: 180,
+    margin: "0 5px",
   },
   'list-item-img': {
-    width: 100,
-    height: 80,
+    width: 300,
+    height: 180,
   }
 })
 
@@ -31,16 +34,34 @@ const useStyle = makeStyles({
 function InfinitelyScrollBar() {
   const styles = useStyle();
   const list = React.useRef<HTMLUListElement | null>(null);
-  const boundary = React.useRef<[ Element | null, Element | null ]>([ null, null ]);
 
-  console.log(window.api)
-  console.log("eval", eval('require("electron")'));
-  React.useEffect(function selector() {
-    if ( list.current ) {
-      const list_children = list.current?.children!;
-      boundary.current[0] = list_children.item(0);
-      boundary.current[1] = list_children.item(list_children.length - 1);
+  function init() {
+    const length = list.current?.children?.length ?? 0;
+
+    function translateX() {
+      const arr = [];
+      for ( let i = 1; i < length; i++ ) {
+        arr.push({
+          translateX: -310 * i,
+          delay: 2000,
+          duration: 2000,
+        });
+      }
+      return arr;
     }
+
+    if ( length > 1 ) {
+      Animated({
+        targets: list.current,
+        keyframes:translateX(),
+        easing: "linear",
+        loop: true,
+      })
+    }
+  }
+
+  React.useEffect(function selector() {
+    init();
   }, [])
 
   const List = React.forwardRef<HTMLUListElement, { children: React.ReactNode }>((props: HTMLAttributes<HTMLUListElement>, ref) => {
@@ -63,6 +84,7 @@ function InfinitelyScrollBar() {
           <Item src={imagine2}/>
           <Item src={imagine3}/>
           <Item src={imagine4}/>
+          <Item src={imagine1}/>
         </List>
       </div>
     </Suspense>

@@ -1,8 +1,15 @@
 import MenuBuilder from "./menu";
+import IpcService from "../services/IpcService";
 
 const { app, BrowserWindow } = require("electron");
 const { getAssetURL } = require("../../snowpack-cli/index");
 const path = require("path");
+
+const PRELOAD_SCRIPT_PATH = path.resolve(__dirname, "../../src/preload.js");
+
+function setup(){
+  IpcService();
+}
 
 // install the development plugin
 const installExtensions = async () => {
@@ -32,7 +39,7 @@ async function createWindow() {
       nodeIntegration: false, // is default value after Electron v5
       contextIsolation: true, // protect against prototype pollution
       enableRemoteModule: false, // turn off remote
-      preload:"./preload.js"
+      preload: PRELOAD_SCRIPT_PATH
     },
   })
   if ( process.env.NODE_ENV !== 'production' ) {
@@ -45,6 +52,7 @@ async function createWindow() {
 
   const menuBuilder = new MenuBuilder(win);
   menuBuilder.buildMenu();
+  setup();
 
   return win;
 }

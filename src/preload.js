@@ -3,11 +3,11 @@ const {
     ipcRenderer
 } = require("electron");
 
+const validChannels = ["toMain"]
 
-contextBridge.exposeInMainWorld("api",{
-    send:(channel, data)=>{
+contextBridge.exposeInMainWorld("api", {
+    send: (channel, data) => {
         // whitelist channels
-        let validChannels = ["toMain"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
         }
@@ -18,6 +18,13 @@ contextBridge.exposeInMainWorld("api",{
             // Deliberately strip event as it includes `sender`
             ipcRenderer.on(channel, (event, ...args) => func(...args));
         }
+    },
+
+    sendSync: (channel, data) => {
+        if (validChannels.includes(channel)) {
+            return ipcRenderer.sendSync(channel, data)
+        }
+        return null;
     }
-})
+});
 
