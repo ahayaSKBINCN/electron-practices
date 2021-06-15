@@ -44,7 +44,8 @@ function InfinitelyScrollBar() {
         arr.push({
           translateX: -310 * i,
           delay: 2000,
-          duration: 2000,
+          duration: 500,
+          easing:"easeOutCubic"
         });
       }
       return arr;
