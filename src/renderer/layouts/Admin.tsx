@@ -1,6 +1,6 @@
-import routes from '../route';
+import getRoutes from '../.routes';
 import { makeStyles } from '@material-ui/core';
-import React, { createRef } from 'react';
+import React, { createRef, lazy } from 'react';
 import styles from '../assets/jss/layouts/admin.styles';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 // import PerfectScrollbar from 'perfect-scrollbar';
@@ -12,14 +12,20 @@ import Footer from '../components/Footer/Footer';
 import FixedPlugin from '../components/FixedPlugin/FixedPlugin';
 import ErrorBoundary from "../components/ErrorBoundary";
 // let ps: any;
-
+const routes = getRoutes();
 const AdminRoutes = routes.filter((route) => route.layout === '/admin');
 const switchRoutes = (
   <Switch>
     {AdminRoutes.map((props) => {
       const { layout, path, component } = props;
+      const _component = (props: any) => {
+        const RC = React.lazy(component);
+        return <React.Suspense fallback={"loading"}>
+          <RC {...props}/>
+        </React.Suspense>
+      }
       return (
-        <Route path={layout + path} component={component} key={layout + path}/>
+        <Route path={layout + path} component={_component} key={layout + path}/>
       );
     })}
     <Redirect from="/admin" to="/admin/InfinitelyScrollBar"/>

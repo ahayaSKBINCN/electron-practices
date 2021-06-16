@@ -6,7 +6,7 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import classNames from 'classnames';
-import Menu from '@material-ui/icons/Menu';
+import { Menu } from '@material-ui/icons';
 import styles from '../../assets/jss/components/header.styles';
 import React from 'react';
 import Button from '../CustomButtons/Button';

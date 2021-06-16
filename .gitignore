@@ -4,6 +4,7 @@
 # generate
 /dist
 /build
+/src/renderer/.routes
 
 # yarn npm
 yarn-error.log

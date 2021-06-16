@@ -1,5 +1,5 @@
 import MenuBuilder from "./menu";
-import IpcService from "../services/IpcService";
+import RouteService from "../services/RouteService";
 
 const { app, BrowserWindow } = require("electron");
 const { getAssetURL } = require("../../snowpack-cli/index");
@@ -7,15 +7,15 @@ const path = require("path");
 
 const PRELOAD_SCRIPT_PATH = path.resolve(__dirname, "../../src/preload.js");
 
-function setup(){
-  IpcService();
+function setup() {
+  RouteService.create();
 }
 
 // install the development plugin
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+  const extensions = [ 'REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS' ];
   return installer
     .default(
       extensions.map((name) => installer[name]),
@@ -25,6 +25,7 @@ const installExtensions = async () => {
 };
 
 async function createWindow() {
+
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -52,15 +53,16 @@ async function createWindow() {
 
   const menuBuilder = new MenuBuilder(win);
   menuBuilder.buildMenu();
-  setup();
 
   return win;
 }
 
-app.whenReady().then(async ()=>{
+app.whenReady().then(async () => {
+  setup();
+
   const main = await createWindow()
   main.webContents.on("did-frame-finish-load", async () => {
-    if (process.env.NODE_ENV === 'development') {
+    if ( process.env.NODE_ENV === 'development' ) {
       await installExtensions();
     }
   });

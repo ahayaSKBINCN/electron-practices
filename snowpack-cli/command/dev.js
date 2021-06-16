@@ -88,6 +88,9 @@ const getRenderer = function () {
             {verbose: true}
         );
         snowpack = await startSnowpackServer({config: cfg});
+        snowpack.onFileChange(function ({ filePath}){
+            console.log("handle the file change for onFileChange "+ filePath);
+        })
     };
     return {
         kill,
@@ -114,7 +117,6 @@ module.exports = async function (electronArgs) {
     try {
         await renderer.dev();
     } catch (err) {
-        console.error(err);
         log.error(err, {label: "snowpack-dev-renderer-error"});
         process.exit(1);
     }

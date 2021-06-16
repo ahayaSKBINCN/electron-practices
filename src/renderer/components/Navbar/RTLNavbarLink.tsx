@@ -62,7 +62,7 @@ export default function RTLNavbarLinks() {
           color={window.innerWidth > 959 ? 'transparent' : 'white'}
           justIcon={window.innerWidth > 959}
           simple={ !( window.innerWidth > 959 )}
-          aria-owns={open ? 'menu-list-grow' : null}
+          aria-owns={open ? 'menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
           className={classes.buttonLink}

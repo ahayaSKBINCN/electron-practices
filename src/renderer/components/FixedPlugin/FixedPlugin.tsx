@@ -3,7 +3,7 @@ import React from "react";
 // nodejs library to set properties for components
 // nodejs library that concatenates classes
 import classnames from "classnames";
-import Settings from '@material-ui/icons/Settings'
+import { Settings } from '@material-ui/icons'
 
 import { imagine1, imagine2, imagine3, imagine4 } from "../../assets/images";
 

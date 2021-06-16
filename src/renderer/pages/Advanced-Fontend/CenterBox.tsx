@@ -76,7 +76,6 @@ export default function CenterBox() {
     </div> )
   }
 
-
   return <div className={clazz.container}>
     <SubBox subClazz="v1"/>
     <SubBox subClazz="v2"/>

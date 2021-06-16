@@ -99,7 +99,7 @@ export default function AdminNavbarLinks() {
           color={innerW > 959 ? 'transparent' : 'white'}
           justIcon={innerW > 959}
           simple={ !( innerW > 959 )}
-          aria-owns={openNotification ? 'notification-menu-list-grow' : null}
+          aria-owns={openNotification ? 'notification-menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleClickNotification}
           className={classes.buttonLink}
@@ -181,7 +181,7 @@ export default function AdminNavbarLinks() {
           color={innerW > 959 ? 'transparent' : 'white'}
           justIcon={innerW > 959}
           simple={ !( innerW > 959 )}
-          aria-owns={openProfile ? 'profile-menu-list-grow' : null}
+          aria-owns={openProfile ? 'profile-menu-list-grow' : undefined}
           aria-haspopup="true"
           onClick={handleClickProfile}
           className={classes.buttonLink}

@@ -1,4 +1,4 @@
-import { Button, ButtonClassKey, makeStyles } from '@material-ui/core';
+import { Button, ButtonClassKey, ButtonProps, makeStyles } from '@material-ui/core';
 import classNames from 'classnames';
 import React from 'react';
 import styles from '../../assets/jss/components/button.styles';
@@ -6,7 +6,7 @@ import styles from '../../assets/jss/components/button.styles';
 type ButtonChild = React.ReactElement | Node | React.ReactText;
 type ButtonChildren = ButtonChild[] | ButtonChild;
 
-export interface ButtonProperties {
+export interface ButtonProperties extends Omit<ButtonProps, "color" | "size"> {
   [key: string]: boolean | string | Node | unknown;
 
   color?:
@@ -31,6 +31,7 @@ export interface ButtonProperties {
 }
 
 const useStyles = makeStyles(styles);
+
 function RegularButton(props: ButtonProperties) {
   const clazz = useStyles({});
   const {
