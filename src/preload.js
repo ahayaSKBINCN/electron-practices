@@ -1,30 +1,48 @@
 const {
-    contextBridge,
-    ipcRenderer
+  contextBridge,
+  ipcRenderer
 } = require("electron");
+const SYMBOL_EMITTER = Symbol("emitter");
+const SYMBOL_HANDLER = Symbol("handler");
 
-const validChannels = ["toMain"]
+const map = new Map();
 
 contextBridge.exposeInMainWorld("api", {
-    send: (channel, data) => {
-        // whitelist channels
-        if (validChannels.includes(channel)) {
-            ipcRenderer.send(channel, data);
-        }
-    },
-    receive: (channel, func) => {
-        let validChannels = ["fromMain"];
-        if (validChannels.includes(channel)) {
-            // Deliberately strip event as it includes `sender`
-            ipcRenderer.on(channel, (event, ...args) => func(...args));
-        }
-    },
-
-    sendSync: (channel, data) => {
-        if (validChannels.includes(channel)) {
-            return ipcRenderer.sendSync(channel, data)
-        }
-        return null;
+   [SYMBOL_EMITTER]: function MessageEmitter(channel, ...data) {
+    switch ( channel ) {
+      case "LOGIN":
+      case "READ_NOTES":
+      case "SAVE_NOTES":
+      default:
+        ipcRenderer.send(channel, ...data)
     }
+  },
+
+  [SYMBOL_HANDLER]: function MessageHandler ( channel, handler){
+    switch ( channel ) {
+      case "LOGIN":
+      case "READ_NOTES":
+      case "SAVE_NOTES":
+      default:
+        ipcRenderer.on(channel, (event,...args)=>handler(...args));
+      }
+  },
+
+  createBridge: async function (channel, ...args ){
+     switch( channel ){
+       case "LOGIN":
+       case "READ_NOTES":
+       case "SAVE_NOTES":
+       default:
+         if(map.has(channel)){
+           const emitter = map.get(channel);
+           emitter.emit
+         }
+     }
+
+}
+
+
+
 });
 

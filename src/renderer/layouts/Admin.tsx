@@ -1,6 +1,6 @@
 import getRoutes from '../.routes';
 import { makeStyles } from '@material-ui/core';
-import React, { createRef, lazy } from 'react';
+import React, { createRef,  useEffect } from 'react';
 import styles from '../assets/jss/layouts/admin.styles';
 import { Redirect, Route, Switch, useLocation } from 'react-router-dom';
 // import PerfectScrollbar from 'perfect-scrollbar';
@@ -12,33 +12,29 @@ import Footer from '../components/Footer/Footer';
 import FixedPlugin from '../components/FixedPlugin/FixedPlugin';
 import ErrorBoundary from "../components/ErrorBoundary";
 // let ps: any;
-const routes = getRoutes();
-const AdminRoutes = routes.filter((route) => route.layout === '/admin');
+const routes = getRoutes().sort((a, b) => ( ( a.menu?.sort ?? 0 ) - ( b.menu?.sort ?? 0 ) ));
 const switchRoutes = (
   <Switch>
-    {AdminRoutes.map((props) => {
-      const { layout, path, component } = props;
-      const _component = (props: any) => {
-        const RC = React.lazy(component);
-        return <React.Suspense fallback={"loading"}>
-          <RC {...props}/>
-        </React.Suspense>
-      }
+    {routes.map((props) => {
+      const { layout = "/admin", path, component, route } = props;
       return (
-        <Route path={layout + path} component={_component} key={layout + path}/>
+        <Route path={layout + path} component={component} key={layout + path}>
+          {route && route.map(item => {
+            return ( <Route path={layout + item.path} component={item.component} key={layout + item.path}/> )
+          })}
+        </Route>
       );
     })}
-    <Redirect from="/admin" to="/admin/InfinitelyScrollBar"/>
+    <Redirect from="/admin" to="/admin/Dashboard/Dashboard"/>
   </Switch>
 );
 const useStyle = makeStyles(styles);
 export default function AdminLayout(props: any) {
-  const location = useLocation();
   const { theme } = props;
-  const clazz = useStyle(theme);
+  const styles = useStyle(theme);
   const mainPanel = createRef<HTMLDivElement>();
   const [ img, $img ] = React.useState(bgImg);
-  const [ color, $color ] = React.useState('blue');
+  const [ color, $color ] = React.useState<TypedTheme>('blue');
   const [ fixedClasses, $fixedClasses ] = React.useState('dropdown');
   const [ mobileOpen, $mobileOpen ] = React.useState(false);
   const handleImageClick = function handleImageClick(image: any) {
@@ -60,32 +56,34 @@ export default function AdminLayout(props: any) {
   const getRoute = function getRoute() {
     return window.location.pathname !== '/admin/maps';
   };
-  // const resizeFunction = function () {
-  //   if (window.innerWidth >= 960) {
-  //     $mobileOpen(false);
-  //   }
-  // };
-  // useEffect(
-  //   function () {
-  //     if (navigator.platform.indexOf('Win') > -1) {
-  //       ps = new PerfectScrollbar(mainPanel.current as Element, {
-  //         suppressScrollX: true,
-  //         suppressScrollY: false,
-  //       });
-  //
-  //       document.body.style.overflow = 'hidden';
-  //     }
-  //     window.addEventListener('resize', resizeFunction);
-  //     // Specify how to clean up after this effect:
-  //     return function cleanup() {
-  //       if (navigator.platform.indexOf('Win') > -1) {
-  //         ps.destroy();
-  //       }
-  //       window.removeEventListener('resize', resizeFunction);
-  //     };
-  //   },
-  //   [mainPanel]
-  // );
+  const resizeFunction = function () {
+    if ( window.innerWidth >= 960 ) {
+      $mobileOpen(false);
+    }
+  };
+
+
+  useEffect(
+    function () {
+      // if (navigator.platform.indexOf('Win') > -1) {
+      //   ps = new PerfectScrollbar(mainPanel.current as Element, {
+      //     suppressScrollX: true,
+      //     suppressScrollY: false,
+      //   });
+      //
+      //   document.body.style.overflow = 'hidden';
+      // }
+      window.addEventListener('resize', resizeFunction);
+      // Specify how to clean up after this effect:
+      return function cleanup() {
+        // if (navigator.platform.indexOf('Win') > -1) {
+        //   ps.destroy();
+        // }
+        window.removeEventListener('resize', resizeFunction);
+      };
+    },
+    [ mainPanel ]
+  );
   // if (
   //   location.pathname !== '/common/login' &&
   //   !sessionStorage.getItem('token')
@@ -94,9 +92,9 @@ export default function AdminLayout(props: any) {
   // }
 
   return (
-    <div className={clazz.wrapper}>
+    <div className={styles.wrapper}>
       <Sidebar
-        routes={AdminRoutes}
+        routes={routes}
         logoText="Creative Tim"
         logo={logo}
         image={img}
@@ -105,7 +103,7 @@ export default function AdminLayout(props: any) {
         color={color}
         {...props}
       />
-      <div className={clazz.mainPanel} ref={mainPanel}>
+      <div className={styles.mainPanel} ref={mainPanel}>
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
@@ -113,15 +111,15 @@ export default function AdminLayout(props: any) {
         />
         {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
         {getRoute() ? (
-          <div className={clazz.content}>
-            <div className={clazz.container}>
+          <div className={styles.content}>
+            <div className={styles.container}>
               <ErrorBoundary>
                 {switchRoutes}
               </ErrorBoundary>
             </div>
           </div>
         ) : (
-          <div className={clazz.map}>{switchRoutes}</div>
+          <div className={styles.map}>{switchRoutes}</div>
         )}
         {getRoute() ? <Footer/> : null}
         <FixedPlugin

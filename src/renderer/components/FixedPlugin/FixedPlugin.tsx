@@ -15,14 +15,12 @@ interface FixedPluginProperties {
 
   bgImage: string | undefined;
   handleFixedClick: () => void;
-  rtlActive?: boolean;
   bgColor: "purple" | "blue" | "green" | "orange" | "red";
   handleColorClick: Function;
   handleImageClick: Function;
 }
 
 FixedPlugin.defaultProps = {
-  rtlActive: false
 }
 
 export default function FixedPlugin(props: FixedPluginProperties) {
@@ -34,9 +32,7 @@ export default function FixedPlugin(props: FixedPluginProperties) {
   };
   return (
     <div
-      className={classnames("fixed-plugin", {
-        "rtl-fixed-plugin": props.rtlActive
-      })}
+      className={classnames("fixed-plugin")}
     >
       <div id="fixedPluginClasses" className={props.fixedClasses}>
         <div onClick={handleClick}>

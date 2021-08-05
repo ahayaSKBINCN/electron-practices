@@ -15,7 +15,7 @@ module.exports = {
     },
     plugins: [
         '@snowpack/plugin-dotenv',
-        !dev && path.join(__dirname, '../lib/snowpack-plugin-relative-proxy-imports.js'),
+        !dev && path.join(__dirname, '../snowpack-plugin-relative-proxy-imports.js'),
         config.isTS && '@snowpack/plugin-typescript',
     ].filter(Boolean),
     devOptions: {
@@ -27,7 +27,7 @@ module.exports = {
         out: path.join(config.outputDir, 'renderer'),
     },
     packageOptions: {
-        external: [...builtinModules.filter((external) => external !== 'process'),'electron'],
+        external: [...builtinModules.filter((external) => external !== 'process'),'electron','realm'],
     },
 
 };

@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
-import { makeStyles } from "@material-ui/core";
+import { hexToRgb, makeStyles } from "@material-ui/core";
 import Animated from "animejs";
 import Button from "../../components/CustomButtons/Button";
+import { grayColor } from "../../assets/jss/theme";
+
+
 
 
 const randomArr = function () {
@@ -29,9 +32,10 @@ const useStyles = makeStyles({
   container: {
     width: "100%",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    // background:primaryColor[0]
   },
   box: {
     width: 610,
@@ -51,8 +55,19 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-around",
-    alignItems: "center"
+    alignItems: "center",
+  },
+  row: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    margin: "50px 25px",
+    padding: 18,
+    background: hexToRgb(grayColor[0])
   }
+
 })
 
 interface BubbleSortConfig {
@@ -71,7 +86,7 @@ const useBubbleSort = function (config: BubbleSortConfig) {
     boxRef
   } = config;
   if ( arr && !Array.isArray(arr) ) throw new TypeError(`Typeof [config.arr] must be Array<Number>, but got ${typeof arr}`);
-  const targets = arr ?? randomArr();
+  const targets = arr ? arr?.map(i => i) : randomArr();
   const [ type, $type ] = React.useState<"normal" | "best">(_type ?? "normal");
 
   const collection = React.useRef<{ [key: string]: { item: HTMLDivElement | null, plus: number, minus: number } } | null>(null);
@@ -122,7 +137,7 @@ const useBubbleSort = function (config: BubbleSortConfig) {
       }
     }
   }
-  const startAnimated = React.useCallback(() => {
+  const createAnimation = React.useCallback(() => {
     const cb = type === "normal" ? normal : best;
     cb(targets);
   }, [ type ])
@@ -145,7 +160,7 @@ const useBubbleSort = function (config: BubbleSortConfig) {
     // 删除已存在的Node
     if ( collection.current && Object.keys(collection.current).length > 0 ) {
       collection.current = {}
-      while(boxRef.current?.firstChild){
+      while ( boxRef.current?.firstChild ) {
         boxRef.current?.removeChild(boxRef.current?.firstChild);
       }
     }
@@ -171,7 +186,7 @@ const useBubbleSort = function (config: BubbleSortConfig) {
       Object.keys(collection.current).forEach(key => {
         if ( collection.current![key] === null ) delete collection.current![key]
       })
-      startAnimated()
+      createAnimation();
     }
   }, [ collection.current, type ]);
   return {
@@ -184,7 +199,7 @@ const useBubbleSort = function (config: BubbleSortConfig) {
 }
 
 
-export default function BubbleSort() {
+function NormalBubbleSort() {
   const box = React.useRef<HTMLDivElement | null>(null);
   const {
     play,
@@ -196,16 +211,53 @@ export default function BubbleSort() {
     type: "normal",
     boxRef: box
   })
+  return ( <div className={styles.row}>
+    <div className={styles.box} ref={box}/>
+    <div className={styles["btn-group"]}>
+      <Button onClick={play} size="sm" color="primary">PLAY</Button>
+      <Button onClick={pause} size="sm" color="primary">PAUSE</Button>
+      <Button onClick={restart} size="sm" color="primary">RESTART</Button>
+    </div>
+  </div> )
+}
 
+function BetterBubbleSort() {
+  const box = React.useRef<HTMLDivElement | null>(null);
+  const {
+    play,
+    pause,
+    restart,
+    styles
+  } = useBubbleSort({
+    arr,
+    type: "best",
+    boxRef: box
+  })
+  return ( <div className={styles.row}>
+    <div className={styles.box} ref={box}/>
+    <div className={styles["btn-group"]}>
+      <Button onClick={play} size="sm" color="primary">PLAY</Button>
+      <Button onClick={pause} size="sm" color="primary">PAUSE</Button>
+      <Button onClick={restart} size="sm" color="primary">RESTART</Button>
+    </div>
+  </div> )
+}
+
+function BubbleSort(props: any) {
+  const styles = useStyles();
 
   return (
     <div className={styles.container}>
-      <div className={styles.box} ref={box}/>
-      <div className={styles["btn-group"]}>
-        <Button onClick={play} size="sm" color="primary">PLAY</Button>
-        <Button onClick={pause} size="sm" color="primary">PAUSE</Button>
-        <Button onClick={restart} size="sm" color="primary">RESTART</Button>
-      </div>
+      <BetterBubbleSort/>
     </div>
   )
 }
+
+BubbleSort.menu = {
+  name: "冒泡排序",
+  icon: "sort",
+  sort: 2,
+}
+
+
+export default BubbleSort;

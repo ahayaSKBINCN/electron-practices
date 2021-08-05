@@ -2,8 +2,7 @@
 import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
+import { List,ListItem } from "@material-ui/core";
 // core components
 import styles from "../../assets/jss/components/footer.styles";
 

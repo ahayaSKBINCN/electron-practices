@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { List } from "@material-ui/core";
 import Animated from 'animejs';
 
-
 const useStyle = makeStyles({
   container: {
     width: 310,
@@ -32,6 +31,7 @@ const useStyle = makeStyles({
 
 
 function InfinitelyScrollBar() {
+
   const styles = useStyle();
   const list = React.useRef<HTMLUListElement | null>(null);
 
@@ -45,7 +45,7 @@ function InfinitelyScrollBar() {
           translateX: -310 * i,
           delay: 2000,
           duration: 500,
-          easing:"easeOutCubic"
+          easing: "easeOutCubic"
         });
       }
       return arr;
@@ -54,7 +54,7 @@ function InfinitelyScrollBar() {
     if ( length > 1 ) {
       Animated({
         targets: list.current,
-        keyframes:translateX(),
+        keyframes: translateX(),
         easing: "linear",
         loop: true,
       })
@@ -90,6 +90,12 @@ function InfinitelyScrollBar() {
       </div>
     </Suspense>
   );
+}
+
+InfinitelyScrollBar.menu = {
+  name: "轮播图",
+  icon: "view_carousel",
+  sort: 4,
 }
 
 export default InfinitelyScrollBar;

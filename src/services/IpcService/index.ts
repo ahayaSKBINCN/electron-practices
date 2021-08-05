@@ -5,11 +5,6 @@ const {
   ipcMain
 } = require("electron");
 
-enum DataType {
-  readNotes,
-  saveNotes
-}
-
 const IpcService = ( function () {
   let instance: Service | null = null;
 
@@ -26,12 +21,11 @@ const IpcService = ( function () {
           payload,
         } = data;
 
-        console.log(type)
-        if ( type === DataType.readNotes ) {
+        if ( type === Channel.READ_NOTES ) {
           const result = readNotes();
           ipcMain.emit("fromMain", data);
         }
-        if ( type === DataType.saveNotes ) {
+        if ( type === Channel.SAVE_NOTES ) {
           const {
             data, name
           } = payload as { name: string, data: any }

@@ -1,9 +1,9 @@
 const path = require("path");
 const chalk = require("chalk");
-const onExit = require('signal-exit');
 const execa = require('execa');
 const {build: esBuild} = require('esbuild');
 const {startServer: startSnowpackServer} = require('snowpack');
+const RouteService = require("../route");
 
 const config = require("../config");
 const log = require("../log");
@@ -87,10 +87,10 @@ const getRenderer = function () {
             `Starting ${chalk.bold('Snowpack')} server with config: ${log.stringify(cfg, true)}`,
             {verbose: true}
         );
+        const server = new RouteService.Builder().build();
+        server.startWork();
         snowpack = await startSnowpackServer({config: cfg});
-        snowpack.onFileChange(function ({ filePath}){
-            console.log("handle the file change for onFileChange "+ filePath);
-        })
+        snowpack.onFileChange(server.onFileChange);
     };
     return {
         kill,
@@ -102,18 +102,21 @@ module.exports = async function (electronArgs) {
     const main = getMain();
     const renderer = getRenderer();
 
-    onExit(async function (code) {
-        if (code === 1) {
-            log.error('🚨 An unexpected error has occurred!');
-        } else {
-            log.info('🔌 Shutting down gracefully...');
-        }
-        try {
-            await Promise.all([main.kill(), renderer.kill()])
-        } finally {
-            process.exit(code);
-        }
-    });
+    // onExit(async function (code) {
+    //     // fix the error does not
+    //     if(process.env.NODE_ENV === "production"){
+    //         if (code === 1) {
+    //             log.error('🚨 An unexpected error has occurred!');
+    //         } else {
+    //             log.info('🔌 Shutting down gracefully...');
+    //         }
+    //         try {
+    //             await Promise.all([main.kill(), renderer.kill()])
+    //         } finally {
+    //             process.exit(code);
+    //         }
+    //     }
+    // });
     try {
         await renderer.dev();
     } catch (err) {

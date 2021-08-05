@@ -18,25 +18,23 @@ const useStyles = makeStyles(styles);
 interface Route {
   layout: string;
   path: string;
-  rtlName: string;
   name: string;
 }
 
 interface NavbarProperties {
   color: 'primary' | 'info' | 'success' | 'warning' | 'danger';
-  rtlActive: boolean;
   handleDrawerToggle: () => void;
   routes: Route[];
 }
 
 export default function Navbar(props: NavbarProperties) {
-  const clazz = useStyles({});
+  const styles = useStyles({});
 
   function makeBrand() {
     let name = '';
     props.routes.map((prop) => {
-      if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
-        name = props.rtlActive ? prop.rtlName : prop.name;
+      if ( window.location.href.indexOf(prop.path) !== -1 ) {
+        name = prop.name;
       }
       return null;
     });
@@ -45,20 +43,20 @@ export default function Navbar(props: NavbarProperties) {
 
   const { color } = props;
   const appBarClazz = classNames({
-    [` ${clazz[color]}`]: color,
+    [` ${styles[color]}`]: color,
   });
-  const { rtlActive, handleDrawerToggle } = props;
+  const { handleDrawerToggle } = props;
   return (
-    <AppBar className={clazz.appBar + appBarClazz}>
-      <Toolbar className={clazz.container}>
-        <div className={clazz.flex}>
+    <AppBar className={styles.appBar + appBarClazz}>
+      <Toolbar className={styles.container}>
+        <div className={styles.flex}>
           {/* Here we create navbar brand, based on route name */}
-          <Button color="transparent" href="#" className={clazz.title} link>
+          <Button color="transparent" href="#" className={styles.title} link>
             {makeBrand()}
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          {rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+          <AdminNavbarLinks/>
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
@@ -66,7 +64,7 @@ export default function Navbar(props: NavbarProperties) {
             aria-label="open drawer"
             onClick={handleDrawerToggle}
           >
-            <Menu />
+            <Menu/>
           </IconButton>
         </Hidden>
       </Toolbar>

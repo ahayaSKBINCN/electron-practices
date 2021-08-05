@@ -4,12 +4,9 @@ declare var api: {
   receive: (channel: string, func: (...args: any[]) => void) => void;
 };
 
-enum DataType {
-  readNotes,
-  saveNotes,
-}
+
 
 interface ApiData {
-  type: number;
+  type: Channel;
   payload: unknown;
 }

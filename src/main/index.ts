@@ -1,15 +1,10 @@
-import MenuBuilder from "./menu";
-import RouteService from "../services/RouteService";
+const MenuBuilder = require("./menu").default; // import the right click menu.
+const { app, BrowserWindow } = require("electron"); // import electron
+const { getAssetURL } = require("../../snowpack-cli/index"); // import the asset url getter
+const path = require("path"); // import path module
 
-const { app, BrowserWindow } = require("electron");
-const { getAssetURL } = require("../../snowpack-cli/index");
-const path = require("path");
-
+// static resolve preloadjs
 const PRELOAD_SCRIPT_PATH = path.resolve(__dirname, "../../src/preload.js");
-
-function setup() {
-  RouteService.create();
-}
 
 // install the development plugin
 const installExtensions = async () => {
@@ -45,7 +40,6 @@ async function createWindow() {
   })
   if ( process.env.NODE_ENV !== 'production' ) {
     win.webContents.openDevTools();
-
   }
 
   win.loadURL(getAssetURL('index.html'));
@@ -58,7 +52,10 @@ async function createWindow() {
 }
 
 app.whenReady().then(async () => {
-  setup();
+
+  const RealmDatabase = require("../services/db").default;
+  const  RealmIpcHelper  = require("../services/db/helper").default;
+  new RealmIpcHelper(new RealmDatabase());
 
   const main = await createWindow()
   main.webContents.on("did-frame-finish-load", async () => {

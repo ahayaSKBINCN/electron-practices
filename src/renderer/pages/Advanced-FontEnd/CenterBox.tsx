@@ -28,8 +28,8 @@ const useStyles = makeStyles({
     "&.v5": {
       display: "grid",
     },
-    "&.v6":{
-      display:"flex",
+    "&.v6": {
+      display: "flex",
     },
   },
   subBox: {
@@ -61,22 +61,22 @@ const useStyles = makeStyles({
       justifySelf: "center",
       alignSelf: "center",
     },
-    "&.v6":{
-      margin:"auto",
+    "&.v6": {
+      margin: "auto",
     },
 
   }
 })
 
-export default function CenterBox() {
-  const clazz = useStyles();
+function CenterBox() {
+  const styles = useStyles();
   const SubBox = function ({ subClazz }: { subClazz: string }) {
-    return ( <div className={classNames(clazz.box, subClazz)}>
-      <div className={classNames(clazz.subBox, subClazz)}/>
+    return ( <div className={classNames(styles.box, subClazz)}>
+      <div className={classNames(styles.subBox, subClazz)}/>
     </div> )
   }
 
-  return <div className={clazz.container}>
+  return <div className={styles.container}>
     <SubBox subClazz="v1"/>
     <SubBox subClazz="v2"/>
     <SubBox subClazz="v3"/>
@@ -84,6 +84,12 @@ export default function CenterBox() {
     <SubBox subClazz="v5"/>
     <SubBox subClazz="v6"/>
   </div>
-
-
 }
+
+CenterBox.menu = {
+  name: "居中模型",
+  icon: "format_align_center",
+  sort: 3,
+}
+
+export default CenterBox;

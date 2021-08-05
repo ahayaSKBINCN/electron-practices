@@ -34,7 +34,7 @@ module.exports = async (more) => {
         entryPoints: await promisify(glob)('src/main/@(index|preload).[jt]s'),
         outdir: path.join(config.outputDir, "main"),
         bundle: true,
-        external: ['electron'],
+        external: ['electron','realm'],
         define,
         logLevel,
         ...(isDev ? {} : { minify: true }),

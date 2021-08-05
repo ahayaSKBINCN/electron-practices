@@ -33,7 +33,7 @@ export interface ButtonProperties extends Omit<ButtonProps, "color" | "size"> {
 const useStyles = makeStyles(styles);
 
 function RegularButton(props: ButtonProperties) {
-  const clazz = useStyles({});
+  const styles = useStyles({});
   const {
     color,
     round,
@@ -49,15 +49,15 @@ function RegularButton(props: ButtonProperties) {
     ...rest
   } = { ...RegularButton.defaultProps, ...props };
   const btnClasses = classNames({
-    [clazz.button]: true,
-    [clazz[size]]: size,
-    [clazz[color]]: color,
-    [clazz.round]: round,
-    [clazz.disabled]: disabled,
-    [clazz.simple]: simple,
-    [clazz.block]: block,
-    [clazz.link]: link,
-    [clazz.justIcon]: justIcon,
+    [styles.button]: true,
+    [styles[size]]: size,
+    [styles[color]]: color,
+    [styles.round]: round,
+    [styles.disabled]: disabled,
+    [styles.simple]: simple,
+    [styles.block]: block,
+    [styles.link]: link,
+    [styles.justIcon]: justIcon,
     [className]: className,
   });
   return (
